@@ -3,7 +3,7 @@ tasks:
   - name: Setup
     init: dotnet restore
     command: dotnet restore
- vscode:
+vscode:
   extensions:
     - muhammad-samy.csharp
     - scheiblingco/code-netpack
