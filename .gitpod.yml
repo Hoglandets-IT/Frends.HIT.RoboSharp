@@ -5,5 +5,5 @@ tasks:
     command: dotnet restore
 vscode:
   extensions:
-    - muhammad-samy.csharp
-    - scheiblingco/code-netpack
+    - muhammad-sammy.csharp
+    - scheiblingco.code-netpack
