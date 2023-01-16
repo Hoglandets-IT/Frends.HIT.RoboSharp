@@ -1,0 +1,9 @@
+image: gitpod/workspace-dotnet:latest
+tasks:
+  - name: Setup
+    init: dotnet restore
+    command: dotnet restore
+ vscode:
+  extensions:
+    - muhammad-samy.csharp
+    - scheiblingco/code-netpack
