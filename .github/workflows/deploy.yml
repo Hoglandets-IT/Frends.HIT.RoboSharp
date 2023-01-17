@@ -12,7 +12,7 @@ jobs:
     - name: Build and push
       run: |
         $APIKEY="${{ secrets.FRENDS_NUGET_FEED_KEY }}"
-        $VER=$(Get-Content -Path .\Version)
+        $VER=$(Get-Content -Path .\Version).Split(".")
         $VER[2] = [int]$VER[2] + 1
         $VER = $VER -join "."
         Write-Host "Building version: $VER"
