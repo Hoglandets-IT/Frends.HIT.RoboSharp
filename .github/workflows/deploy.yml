@@ -4,25 +4,24 @@ on:
       - main
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     timeout-minutes: 15
     steps:
     - name: Checkout
       uses: actions/checkout@v2
     - name: Build and push
       run: |
-        APIKEY="${{ secrets.FRENDS_NUGET_FEED_KEY }}"
-        IFS=. read -r v1 v2 v3 <<< $(cat ./VERSION)
-        v3=$((v3 + 1))
-        VERSION="$v1.$v2.$v3"
-        echo "Building version: $VERSION"
-        dotnet pack --configuration Release --include-source --output . /p:Version=$VERSION Frends.HIT.RoboSharp/Frends.HIT.RoboSharp.csproj
-        dotnet nuget push "Frends.HIT.RoboSharp.$VERSION.nupkg" --source https://proget.hoglan.dev/nuget/Frends/ --api-key "$APIKEY"
-        echo "$VERSION" > VERSION
-        rm -f ./Frends.HIT.RoboSharp.*.nupkg
+        $APIKEY="${{ secrets.FRENDS_NUGET_FEED_KEY }}"
+        $VER=$(Get-Content -Path .\Version)
+        $VER[2] = [int]$VER[2] + 1
+        $VER = $VER -join "."
+        Write-Host "Building version: $VER"
+        dotnet pack --configuration Release --include-source --output . /p:Version=$VER .\Frends.HIT.RoboSharp\Frends.HIT.RoboSharp.csproj
+        dotnet nuget push .\Frends.HIT.RoboSharp.$VER.nupkg --source https://proget.hoglan.dev/nuget/Frends/ --api-key "$APIKEY"
+        Set-Content -PATH .\VERSION -Value $VER
+        Remove-Item -Path ./Frends.HIT.RoboSharp.*.nupkg
         git config user.email "autopush@hoglan.dev"
         git config user.name "AutoPush"
         git add VERSION
-        git commit -m "[AUTO] Increment version number"
+        git commit -m "[AUTO] Increment version number to $VER"
         git push origin main
-        echo "Done"
