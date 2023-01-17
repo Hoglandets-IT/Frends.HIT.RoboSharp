@@ -4,7 +4,19 @@ using System.Collections.Generic;
 using System.ComponentModel;
 
 namespace Frends.HIT.RoboSharp {
+    /// <summary>
+    /// Main class containing functions
+    /// </summary>
     public class Main {
+
+        /// <summary>
+        /// Synchronize folders over SMB/2/3 using Robocopy
+        /// </summary>
+        /// <param name="source">Source path and authentication</param>
+        /// <param name="destination">Destintion path and authentiction</param>
+        /// <param name="parameters">Robocopy Parameters</param>
+        /// <returns>SyncExitInfo Object</returns>
+        
         public static SyncExitInfo SyncFolders(PathSettings source, PathSettings destination, [PropertyTab]SyncParameters parameters) {
             // Create the authentication commands
             List<string> AuthCommand = new List<string>(){
@@ -14,21 +26,21 @@ namespace Frends.HIT.RoboSharp {
 
             // Assemble the robocopy command parameters
             List<string> RoboCommand = new List<string>(){
-                "robocopy \"" + source.Path + "\" \"" + destination.Path + "\""
+                "robocopy \"" + source.Path + "\" \"" + destination.Path + "\" /NP"
             };
-
-            // Add the options
-            if (parameters.Options != null) {
-                foreach (RoboOption option in parameters.Options) {
-                    RoboCommand.Add("/" + option.ToString());
-                }
-            }
 
             // Add the retry count
             if (parameters.RetryCount != null) {
                 RoboCommand.Add("/R:" + parameters.RetryCount);
                 if (parameters.RetryWaitTime != null) {
                     RoboCommand.Add("/W:" + parameters.RetryWaitTime);
+                }
+            }
+
+            // Add additional options
+            if (parameters.Options != null) {
+                foreach (RoboOption option in parameters.Options) {
+                    RoboCommand.Add("/" + option.ToString());
                 }
             }
 

@@ -30,6 +30,30 @@ Frends task to synchronize folders between two Windows machines over SMB. Requir
 | Started | DateTime | Time when the synchronization started | Tuesday, 17 January 2023 15:20:21 |
 | Ended | DateTime | Time when the synchronization ended | Tuesday, 17 January 2023 15:21:21 |
 
+### RoboOptions
+Options for customizing robocopy behaviour. See [Robocopy documentation](https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/robocopy) for more information.
+
+| Option | Description |
+| --- | --- |
+| MIR | Mirror a whole directory tree (equivalent to /E plus /PURGE) |
+| S | Copy Subdirectories (recursive) |
+| E | Copy subdirectories, including Empty ones |
+| SEC | Include security options |
+| COPYALL | Copy all file information/metadata |
+| A | Copy only files tagged with the Archive attribute |
+| M | Copy only files tagged with the Archive attribute, then remove attribute on source files after sync |
+| CREATE | Create destination directory structure and empty files only |
+| MOV | Move files (Delete source files after sync but leve directories intact) |
+| MOVE | Move files and folders (Delete source files and folders after sync) |
+| Z | Copy files in restartable mode |
+| ZB | Try copying files in restartable mode, if fails failover to backup mode |
+| J | Copy in unbuffered mode (good for larger files) |
+| XX | Exclude extra files at destination |
+| TBD | Wait for share names to be defined (Retry error 67) |
+| NFL | Do not log file names |
+| NDL | Do not log directory names |
+
+
 ### SyncItemInfo
 | Property | Type | Description |
 | --- | --- | --- |

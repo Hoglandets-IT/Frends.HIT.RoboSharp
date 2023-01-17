@@ -1,7 +1,7 @@
 {
     "Tasks": [
       {
-        "TaskMethod": "Frends.HIT.RoboSharp.RoboCopy"
+        "TaskMethod": "Frends.HIT.RoboSharp.SyncFolders"
       }
     ]
 }
