@@ -1,4 +1,4 @@
-﻿on:
+on:
   push:
     branches:
       - main
@@ -6,30 +6,23 @@ jobs:
   build:
     runs-on: ubuntu-latest
     timeout-minutes: 15
-    env:
-      NUGET_PKG_NAME: ${{ github.event.repository.name }}
-      NUGET_PKG_FEED: ${{ secrets.FRENDS_NUGET_FEED_URL }}
-      NUGET_PKG_KEY: ${{ secrets.FRENDS_NUGET_FEED_KEY }}
-      GH_PUSH_EMAIL: autopush@developer.local
-      GH_PUSH_NAME: AutoPush
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2  
-
-      - name: Build and push
-        
-        run: |
-          IFS=. read -r v1 v2 v3 <<< $(cat ./VERSION)
-          v3=$((v3 + 1))
-          VERSION="$v1.$v2.$v3"
-          echo "Building version: $VERSION"
-          dotnet pack --configuration Release --include-source --output . /p:Version=$VERSION "${{ env.NUGET_PKG_NAME }}/${{ env.NUGET_PKG_NAME }}.csproj"
-          dotnet nuget push "${{ env.NUGET_PKG_NAME }}.$VERSION.nupkg" --source "${{ env.NUGET_PKG_FEED }}" --api-key "${{ env.NUGET_PKG_KEY }}"
-          echo "$VERSION" > VERSION
-          rm -f "./${{ env.NUGET_PKG_NAME }}.*.nupkg"
-          git config user.email "${{ env.GH_PUSH_EMAIL }}"
-          git config user.name "${{ env.GH_PUSH_NAME }}"
-          git add VERSION
-          git commit -m "[AUTO] Increment version number"
-          git push origin main
-          echo "Done"
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Build and push
+      run: |
+        APIKEY="${{ secrets.FRENDS_NUGET_FEED_KEY }}"
+        IFS=. read -r v1 v2 v3 <<< $(cat ./VERSION)
+        v3=$((v3 + 1))
+        VERSION="$v1.$v2.$v3"
+        echo "Building version: $VERSION"
+        dotnet pack --configuration Release --include-source --output . /p:Version=$VERSION Frends.HIT.RoboSharp/Frends.HIT.RoboSharp.csproj
+        dotnet nuget push "Frends.HIT.RoboSharp.$VERSION.nupkg" --source https://proget.hoglan.dev/nuget/Frends/ --api-key "$APIKEY"
+        echo "$VERSION" > VERSION
+        rm -f ./Frends.HIT.RoboSharp.*.nupkg
+        git config user.email "autopush@hoglan.dev"
+        git config user.name "AutoPush"
+        git add VERSION
+        git commit -m "[AUTO] Increment version number"
+        git push origin main
+        echo "Done"
