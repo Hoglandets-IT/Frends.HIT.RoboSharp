@@ -18,6 +18,8 @@ namespace Frends.HIT.RoboSharp {
         /// <returns>SyncExitInfo Object</returns>
         
         public static SyncExitInfo SyncFolders(PathSettings source, PathSettings destination, [PropertyTab]SyncParameters parameters) {
+            Console.WriteLine("Started");
+            
             // Create the authentication commands
             List<string> AuthCommand = new List<string>(){
                 "net use \"" + source.Path + "\" \"" + source.Password + "\" /user:" + source.Username + ";",
