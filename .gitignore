@@ -348,3 +348,6 @@ MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
+
+Frends.HIT.RoboSharp.Tests/*
+Frends.HIT.RoboSharp.Tests
