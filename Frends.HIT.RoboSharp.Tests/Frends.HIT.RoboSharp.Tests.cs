@@ -2,7 +2,7 @@
 using System;
 
 namespace Frends.HIT.RoboSharp.Tests {
-    class Tests {
+    public class Tests {
         public static void Main() {
             var source = new PathSettings() {
                 Path = @"\\server\something",
