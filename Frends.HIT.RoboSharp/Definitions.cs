@@ -233,7 +233,8 @@ namespace Frends.HIT.RoboSharp {
         /// The password for the user
         /// </summary>
         [Display(Name = "Password")]
-        [DisplayFormat(DataFormatString = "Expression")]
+        [PasswordPropertyText]
+        [DisplayFormat(DataFormatString = "Text")]
         [Required]
         public string Password { get; set; }
     }
@@ -254,14 +255,13 @@ namespace Frends.HIT.RoboSharp {
         /// A list of files to exclude
         /// </summary>
         [Display(Name = @"Excluded Files")]
-        [DefaultValue(new string[] { "Thumbs.db", "desktop.ini" })]
+        [DefaultValue(null)]
         public string[] ExcludeFiles { get; set; }
         
         /// <summary>
         /// A list of folders to exclude
         /// </summary>
         [Display(Name = @"Excluded Folders")]
-        [DefaultValue(null)]
         public string[] ExcludeFolders { get; set; }
 
         /// <summary>
@@ -269,6 +269,7 @@ namespace Frends.HIT.RoboSharp {
         /// </summary>
         [Display(Name = "Retry Count")]
         [DefaultValue("10")]
+        [DisplayFormat(DataFormatString = "Text")]
         public string RetryCount { get; set; }
 
         /// <summary>
@@ -276,17 +277,14 @@ namespace Frends.HIT.RoboSharp {
         /// </summary>
         [Display(Name = "Retry Wait Time")]
         [DefaultValue("30")]
+        [DisplayFormat(DataFormatString = "Text")]
         public string RetryWaitTime { get; set; }
 
         /// <summary>
         /// A list of options to enable for the sync
         /// </summary>
         [Display(Name = "RoboCopy Options")]
-        [DefaultValue(new RoboOption[] { 
-            RoboOption.MIR, 
-            RoboOption.NFL,
-            RoboOption.NDL
-        })]
+        [DefaultValue(null)]
         public RoboOption[] Options { get; set; }
     }
 
@@ -400,6 +398,17 @@ namespace Frends.HIT.RoboSharp {
         /// </summary>
         /// <value></value>
         public string Ended { get; set; }
+
+        /// <summary>
+        /// The full log from RoboCopy
+        /// </summary>
+        public List<string> FullLog { get; set; }
+
+        /// <summary>
+        /// The entire command used to perform the sync
+        /// </summary>
+        /// <value></value>
+        public string Command { get; set; }
     }
     
     /// <summary>

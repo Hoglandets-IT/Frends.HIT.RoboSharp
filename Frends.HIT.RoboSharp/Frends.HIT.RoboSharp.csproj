@@ -35,7 +35,7 @@
   <!-- Specify that the FrendsTaskMetadata.json file is included in the package -->
   <ItemGroup>
     <None Include="FrendsTaskMetadata.json" Pack="true" PackagePath="/">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-</ItemGroup>
+  </ItemGroup>
 </Project>

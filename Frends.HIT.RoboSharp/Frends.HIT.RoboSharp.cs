@@ -1,4 +1,5 @@
-﻿using System.Text.RegularExpressions;
+using Microsoft.VisualBasic;
+using System.Text.RegularExpressions;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -7,6 +8,7 @@ namespace Frends.HIT.RoboSharp {
     /// <summary>
     /// Main class containing functions
     /// </summary>
+    [DisplayName("RoboSharp")]
     public class Main {
 
         /// <summary>
@@ -16,10 +18,8 @@ namespace Frends.HIT.RoboSharp {
         /// <param name="destination">Destintion path and authentiction</param>
         /// <param name="parameters">Robocopy Parameters</param>
         /// <returns>SyncExitInfo Object</returns>
-        
+        [DisplayName("Sync SMB Folders")]
         public static SyncExitInfo SyncFolders(PathSettings source, PathSettings destination, [PropertyTab]SyncParameters parameters) {
-            Console.WriteLine("Started");
-            
             // Create the authentication commands
             List<string> AuthCommand = new List<string>(){
                 "net use \"" + source.Path + "\" \"" + source.Password + "\" /user:" + source.Username + ";",
@@ -78,6 +78,7 @@ namespace Frends.HIT.RoboSharp {
             
             process.Start();
             SyncExitInfo exInfo = new SyncExitInfo(); 
+            List<string> FullLog = new List<string>();
 
             while (!process.StandardOutput.EndOfStream) {
                 string line = process.StandardOutput.ReadLine().TrimStart(new char[]{' ', '\t'});
@@ -85,7 +86,7 @@ namespace Frends.HIT.RoboSharp {
                     throw new Exception(line);
                 }
                 if (line != "") {
-                    Console.WriteLine(line);
+                    FullLog.Add(line);
                     foreach (var retn in Helpers.GetReturnInfo)
                     {
                         if (retn.GetStatistics && line.Substring(0, retn.Match.Length+2) == retn.Match+" :" && !line.Contains("*.*")) {
@@ -108,9 +109,13 @@ namespace Frends.HIT.RoboSharp {
 
             // Get exit code from RoboExitCode by number
             // Get name of exit code
+            // Set other exit parameters
             exInfo.ExitCode = (RoboExitCode)process.ExitCode;
             exInfo.ExitMessage = Regex.Replace(exInfo.ExitCode.ToString(), "(\\B[A-Z])", " $1");
-
+            exInfo.Source = source.Path;
+            exInfo.Destination = destination.Path;
+            exInfo.Command = String.Join(" ", RoboCommand);
+            exInfo.FullLog = FullLog;
             // Close the process
             process.Close();
 
