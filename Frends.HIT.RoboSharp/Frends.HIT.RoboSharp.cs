@@ -61,13 +61,13 @@ namespace Frends.HIT.RoboSharp {
                     FullLog.Add(line);
                     foreach (var retn in Helpers.GetReturnInfo)
                     {
-                        if (retn.GetStatistics && line.Substring(0, retn.Match.Length+2) == retn.Match+" :" && !line.Contains("*.*")) {
+                        if (retn.GetStatistics && line.StartsWith(retn.Match + " :") && !line.Contains("*.*")) {
                             exInfo.GetType().GetProperty(retn.Match).SetValue(
                                 exInfo, 
                                 Helpers.GetStatistics(line, retn.GetStatisticsBytes)
                             );
                         }
-                        else if (!retn.GetStatistics && line.Substring(0, retn.Match.Length+2) == retn.Match+" :") {
+                        else if (!retn.GetStatistics && line.StartsWith(retn.Match + " :")) {
                             exInfo.GetType().GetProperty(retn.Match).SetValue(
                                 exInfo, 
                                 line.Substring(retn.Match.Length+2)

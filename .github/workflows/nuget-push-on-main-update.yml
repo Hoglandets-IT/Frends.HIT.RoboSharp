@@ -1,9 +1,9 @@
 on:
   push:
-    paths: ['Frends.HIT.RoboSharp/**', '.github/workflows/on-push-pullreq.yml']
+    paths: ['Frends.HIT.RoboSharp/**', '.github/workflows/nuget-push-on-main-update.yml', 'VERSION']
     branches: ['main']
   pull_request:
-    paths: ['Frends.HIT.RoboSharp/**', '.github/workflows/on-push-pullreq.yml']
+    paths: ['Frends.HIT.RoboSharp/**', '.github/workflows/nuget-push-on-main-update.yml', 'VERSION']
     branches: ['main']
 
 jobs:
