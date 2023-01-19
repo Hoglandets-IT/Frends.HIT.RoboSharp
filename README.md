@@ -1,6 +1,17 @@
 # Frends.HIT.RoboSharp (.NET 4.7.1)
 ## Frends.HIT.RoboSharp.SyncFolders
 Frends task to synchronize folders between two Windows machines over SMB. Requires .NET 4.7.1 on a Windows machine.
+
+### Changelog
+| Version | Date | Notes |
+| --- | --- | --- |
+| 0.6.1 | 2022-01-18 | Removed redundant naming annotations <br/> Converted options to class instead of enum <br/> Removed redundant code |
+| 0.5.1 | 2022-01-18 | Updated CI |
+| 0.5.0 | 2022-01-17 | Corrections to task definition for compatibility <br/> Finished Documentation |
+| 0.2.4 | 2022-01-17 | Added support for Robocopy options |
+| 0.2.3 | 2022-01-17 | Modified actions flow to get the correct version number |
+| 0.2.1 | 2022-01-17 | Initial version finished |
+
 ### Parameters
 | Property Group | Property | Type | Description | Example |
 | --- | --- | --- | --- | --- |
