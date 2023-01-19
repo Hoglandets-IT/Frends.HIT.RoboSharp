@@ -1,8 +1,8 @@
-using Microsoft.VisualBasic;
 using System.Text.RegularExpressions;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using Newtonsoft.Json;
 
 namespace Frends.HIT.RoboSharp {
     /// <summary>
@@ -55,7 +55,7 @@ namespace Frends.HIT.RoboSharp {
             while (!process.StandardOutput.EndOfStream) {
                 string line = process.StandardOutput.ReadLine().TrimStart(new char[]{' ', '\t'});
                 if (line.StartsWith("ERROR")) {
-                    throw new Exception(line);
+                    FullLog.Add(line);                    
                 }
                 if (line != "") {
                     FullLog.Add(line);
@@ -88,6 +88,10 @@ namespace Frends.HIT.RoboSharp {
             exInfo.FullLog = FullLog;
             // Close the process
             process.Close();
+
+            if (process.ExitCode == (Int32)RoboExitCode.SeriousError) {
+                throw new Exception(JsonConvert.SerializeObject(exInfo));
+            }
 
             // Return the exit code
             return exInfo;

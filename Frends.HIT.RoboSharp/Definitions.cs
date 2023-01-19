@@ -323,7 +323,7 @@ namespace Frends.HIT.RoboSharp {
                 W > 0 ? "/W:" + W : null
             };
 
-            return string.Join(" ", flags.FindAll(f => !string.IsNullOrEmpty(f)));
+            return " " + string.Join(" ", flags.FindAll(f => !string.IsNullOrEmpty(f)));
         }
     }
 
