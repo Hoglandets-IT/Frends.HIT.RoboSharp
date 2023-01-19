@@ -16,7 +16,7 @@ jobs:
         $RELEASE_BRANCH=$(git branch --show-current)
         $VER=$RELEASE_BRANCH.Replace("release-", "")
         Write-Host "Building version: $VER"
-        dotnet pack --configuration Release --include-source --output . /p:Version=$VER .\Frends.HIT.RoboSharp\Frends.HIT.RoboSharp.csproj
+        dotnet pack --configuration Release --include-source --output . /p:Version=$VER ${{ github.event.repository.name }}/${{ github.event.repository.name }}.csproj
     - name: Create Release
       uses: softprops/action-gh-release@v1
       env:
@@ -27,5 +27,5 @@ jobs:
         release_name: Release ${{ github.ref_name }}
         body_path: README.md
         files: |
-          Frends.HIT.RoboSharp.*.nupkg
+          ${{ github.event.repository.name }}.*.nupkg
           README.md

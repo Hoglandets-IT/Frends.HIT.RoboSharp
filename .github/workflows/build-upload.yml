@@ -19,10 +19,10 @@ jobs:
         $VER[2] = [int]$VER[2] + 1
         $VER = $VER -join "."
         Write-Host "Building version: $VER"
-        dotnet pack --configuration Release --include-source --output . /p:Version=$VER .\Frends.HIT.RoboSharp\Frends.HIT.RoboSharp.csproj
-        dotnet nuget push .\Frends.HIT.RoboSharp.$VER.nupkg --source https://proget.hoglan.dev/nuget/Frends/ --api-key "$APIKEY"
+        dotnet pack --configuration Release --include-source --output . /p:Version=$VER .\${{ github.event.repository.name }}\${{ github.event.repository.name }}.csproj
+        dotnet nuget push .\${{ github.event.repository.name }}.$VER.nupkg --source ${{ secrets.FRENDS_NUGET_FEED_URL }} --api-key "$APIKEY"
         Set-Content -PATH .\VERSION -Value $VER
-        Remove-Item -Path ./Frends.HIT.RoboSharp.*.nupkg
+        Remove-Item -Path ./${{ github.event.repository.name }}.*.nupkg
         git config user.email "autopush@hoglan.dev"
         git config user.name "AutoPush"
         git add VERSION
