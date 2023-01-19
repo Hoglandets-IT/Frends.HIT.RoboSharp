@@ -1,7 +1,4 @@
 on:
-  create:
-    ref_type: branch
-    branches: ['release-**']
   push:
     branches: ['release-**']
   pull_request:
