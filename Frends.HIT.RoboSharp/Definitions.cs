@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Data.Common;
+using System.Linq.Expressions;
 using System.Reflection;
 using System.Text;
 
@@ -93,129 +94,13 @@ namespace Frends.HIT.RoboSharp {
     }
 
     /// <summary>
-    /// Available options for the Robocopy command
-    /// </summary>
-    public enum RoboOption {
-        /// <summary>
-        /// Mirror the entire directory tree (recursive)
-        /// Will delete, create and update in destination dir
-        /// Same as /PURGE and /E
-        /// </summary>
-        [Display(Name = "Mirror Directory Tree (/MIR)")]
-        MIR,
-
-        /// <summary>
-        /// Copy subdirectories in path
-        /// </summary>
-        [Display(Name = "Copy Subdirectories (/S)")]
-        S,
-
-        /// <summary>
-        /// Include subdirectories
-        /// </summary>
-        [Display(Name = "Copy Subdirectories including empty folders(/E)")]
-        E,
-
-        /// <summary>
-        /// Copy files including security options
-        /// </summary>
-        [Display(Name = "Copy files with security options (/SEC)")]
-        SEC,
-
-        /// <summary>
-        /// Includes all file information and metadta
-        /// </summary>
-        [Display(Name = "Include all file information (/COPYALL)")]
-        COPYALL,
-
-        /// <summary>
-        /// Copy only files with the archive attribute set
-        /// </summary>
-        [Display(Name = "Copy only Archive files (/A)")]
-        A,
-
-        /// <summary>
-        /// Copy only files with the archive attribute set but remove the attribute on source files
-        /// </summary>
-        [Display(Name = "Copy only Archive files and untag (/M)")]
-        M,
-
-        /// <summary>
-        /// Only create directory tree and zero-length files
-        /// </summary>
-        [Display(Name = "Only create dir tree and null files (/CREATE)")]
-        CREATE,
-        
-        /// <summary>
-        /// Deletes all source files after copying but leaves dir tree intact
-        /// </summary>
-        [Display(Name = "Delete source files after copying (/MOV)")]
-        MOV,
-
-        /// <summary>
-        /// Deletes the source files and folders after synchronization
-        /// </summary>
-        [Display(Name = "Delete source files and folders after sync (/MOVE)")]
-        MOVE,
-
-        /// <summary>
-        /// Copies files in restartable mode (survive network glitches)
-        /// </summary>
-        [Display(Name = "Copy files in restartable mode (/Z)")]
-        Z,
-        
-        /// <summary>
-        /// Try using restartable mode, if not possible fallback to backup mode
-        /// </summary>
-        [Display(Name = "Copy files in restartable mode (/Z)")]
-        ZB,
-
-        /// <summary>
-        /// Copes files in backup mode   
-        /// </summary>
-        [Display(Name = "Copy files in backup mode (/B)")]
-        B,
-
-        /// <summary>
-        /// Copies the files directly without the buffer, useful for large files
-        /// </summary>
-        [Display(Name = "Copy in unbuffered mode (/J)")]
-        J,
-
-        /// <summary>
-        /// Doesn't delete additional files present at destination
-        /// </summary>
-        [Display(Name = "Exclude destination extra files (/XX)")]
-        XX,
-
-        /// <summary>
-        /// Wait for share names to be defined (Retry error 67)
-        /// </summary>
-        [Display(Name = "Wait for share names to be defined (/TBD)")]
-        TBD,
-
-        /// <summary>
-        /// Skip logging filenames
-        /// </summary>
-        [Display(Name = "Do not log file names (/NFL)")]
-        NFL,
-
-        /// <summary>
-        /// Skip logging directory names
-        /// </summary>
-        [Display(Name = "Do not log directory names (/NDL)")]
-        NDL
-    }
-
-    /// <summary>
     /// Configuration for SMB paths
     /// </summary>
     public class PathSettings {
         /// <summary>
         /// The path, without a trailing slash
         /// </summary>
-        [Display(Name = "Path")]
-        [DefaultValue(@"\\SOMESERVER\SomeShare$\SomeFolder")]
+        /// <example>\\SOMESERVER\SomeShare$\SomeFolder</example>
         [DisplayFormat(DataFormatString = "Text")]
         [Required]
         public string Path { get; set; }
@@ -223,8 +108,7 @@ namespace Frends.HIT.RoboSharp {
         /// <summary>
         /// The username to use for the path (e.g. INTERN\f-user)
         /// </summary>
-        [Display(Name = @"DOMAIN\Username")]
-        [DefaultValue(@"DOMAIN\Username")]
+        /// <example>DOMAIN\f-user</example>
         [DisplayFormat(DataFormatString = "Text")]
         [Required]
         public string Username { get; set; }
@@ -232,11 +116,26 @@ namespace Frends.HIT.RoboSharp {
         /// <summary>
         /// The password for the user
         /// </summary>
-        [Display(Name = "Password")]
-        [PasswordPropertyText]
         [DisplayFormat(DataFormatString = "Text")]
+        [PasswordPropertyText]
         [Required]
         public string Password { get; set; }
+    }
+
+    /// <summary>
+    /// Configuration object for transfer settings
+    /// </summary>
+    public class TargetSettings
+    {
+        /// <summary>
+        /// The source folder to copy files from
+        /// </summary>
+        public PathSettings Source { get; set; }
+
+        /// <summary>
+        /// The destination folder to copy files to
+        /// </summary>
+        public PathSettings Destination { get; set; }
     }
 
     /// <summary>
@@ -247,45 +146,185 @@ namespace Frends.HIT.RoboSharp {
         /// <summary>
         /// The shell to use for the sync
         /// </summary>
-        [Display(Name = "Shell")]
         [DefaultValue(RunWithShell.powershell)]
         public RunWithShell Shell { get; set; }
 
         /// <summary>
         /// A list of files to exclude
         /// </summary>
-        [Display(Name = @"Excluded Files")]
         [DefaultValue(null)]
         public string[] ExcludeFiles { get; set; }
         
         /// <summary>
         /// A list of folders to exclude
         /// </summary>
-        [Display(Name = @"Excluded Folders")]
+        [DefaultValue(null)]
         public string[] ExcludeFolders { get; set; }
+
+        /// <summary>
+        /// Mirror Directory Tree
+        /// Mirror the entire directory tree (recursive)
+        /// Will delete, create and update in destination dir
+        /// Same as /PURGE and /E
+        /// </summary>
+        [DefaultValue(true)]
+        public bool MIR { get; set; }
+
+        /// <summary>
+        /// Copy Subdirectories
+        /// </summary>
+        [DefaultValue(false)]
+        public bool S { get; set; }
+        
+        /// <summary>
+        /// Copy Subdirectories including empty folders
+        /// </summary>
+        [DefaultValue(false)]
+        public bool E { get; set; }
+
+        /// <summary>
+        /// Copy files with security options
+        /// </summary>
+        [DefaultValue(false)]
+        public bool SEC { get; set; }
+
+
+        /// <summary>
+        /// Include all file information and metadata
+        /// </summary>
+        [DefaultValue(false)]
+        public bool COPYALL { get; set; }
+
+        /// <summary>
+        /// Copy only files with the archive attribute set
+        /// </summary>
+        [DefaultValue(false)]
+        public bool A { get; set; }
+
+        /// <summary>
+        /// Copy only files with the archive attribute set but remove the attribute on source files
+        /// </summary>
+        [DefaultValue(false)]
+        public bool M { get; set; }
+
+        /// <summary>
+        /// Only create directory tree and zero-length files
+        /// </summary>
+        [DefaultValue(false)]
+        public bool CREATE { get; set; }
+        
+        /// <summary>
+        /// Deletes all source files after copying but leaves dir tree intact
+        /// </summary>
+        [DefaultValue(false)]
+        public bool MOV { get; set; }
+
+        /// <summary>
+        /// Deletes the source files and folders after synchronization
+        /// </summary>
+        [DefaultValue(false)]
+        public bool MOVE { get; set; }
+
+        /// <summary>
+        /// Copies files in restartable mode (survive network glitches)
+        /// </summary>
+        [DefaultValue(false)]
+        public bool Z { get; set; }
+        
+        /// <summary>
+        /// Try using restartable mode, if not possible fallback to backup mode
+        /// </summary>
+        [DefaultValue(true)]
+        public bool ZB { get; set; }
+
+        /// <summary>
+        /// Copes files in backup mode   
+        /// </summary>
+        [DefaultValue(false)]
+        public bool B { get; set; }
+
+        /// <summary>
+        /// Copies the files directly without the buffer, useful for large files
+        /// </summary>
+        [DefaultValue(false)]
+        public bool J { get; set; }
+
+        /// <summary>
+        /// Don't delete additional files present at destination
+        /// </summary>
+        [DefaultValue(false)]
+        public bool XX { get; set; }
+
+        /// <summary>
+        /// Wait for share names to be defined (Retry error 67)
+        /// </summary>
+        [DefaultValue(false)]
+        public bool TBD { get; set; }
+
+        /// <summary>
+        /// Skip logging filenames
+        /// </summary>
+        [DefaultValue(true)]
+        public bool NFL { get; set; }
+
+        /// <summary>
+        /// Skip logging directory names
+        /// </summary>
+        [DefaultValue(true)]
+        public bool NDL { get; set; }
 
         /// <summary>
         /// Number of retries on failed copies
         /// </summary>
-        [Display(Name = "Retry Count")]
-        [DefaultValue("10")]
-        [DisplayFormat(DataFormatString = "Text")]
-        public string RetryCount { get; set; }
+        [DefaultValue(10)]
+        public int R { get; set; }
 
         /// <summary>
         /// Number of seconds to wait between retries
         /// </summary>
-        [Display(Name = "Retry Wait Time")]
-        [DefaultValue("30")]
-        [DisplayFormat(DataFormatString = "Text")]
-        public string RetryWaitTime { get; set; }
+        [DefaultValue(30)]
+        public int W { get; set; }
 
         /// <summary>
-        /// A list of options to enable for the sync
+        /// Returns true if any additional flags are set
         /// </summary>
-        [Display(Name = "RoboCopy Options")]
-        [DefaultValue(null)]
-        public RoboOption[] Options { get; set; }
+        public bool HasAdditionalFlags()
+        {
+            return S || E || SEC || COPYALL || A || M || CREATE || MOV || MOVE || Z || ZB || B || J || XX || TBD || NFL || NDL;
+        }
+
+        /// <summary>
+        /// Returns the additional flags as a string
+        /// </summary>
+        public string GetAdditionalFlags()
+        {
+            var flags = new List<string>(){
+                ExcludeFiles.Length > 0 ? "/XF \"" + String.Join(" ", ExcludeFiles) + "\"" : null, 
+                ExcludeFolders.Length > 0 ? "/XF \"" + String.Join(" ", ExcludeFolders) + "\"" : null, 
+                MIR ? "/MIR" : null,
+                S ? "/S" : null,
+                E ? "/E" : null,
+                SEC ? "/SEC" : null,
+                COPYALL ? "/COPYALL" : null,
+                A ? "/A" : null,
+                M ? "/M" : null,
+                CREATE ? "/CREATE" : null,
+                MOV ? "/MOV" : null,
+                MOVE ? "/MOVE" : null,
+                Z ? "/Z" : null,
+                ZB ? "/ZB" : null,
+                B ? "/B" : null,
+                J ? "/J" : null,
+                XX ? "/XX" : null,
+                TBD ? "/TBD" : null,
+                NFL ? "/NFL" : null,
+                NDL ? "/NDL" : null,
+                R > 0 ? "/R:" + R : null,
+                W > 0 ? "/W:" + W : null
+            };
+
+            return string.Join(" ", flags.FindAll(f => !string.IsNullOrEmpty(f)));
+        }
     }
 
     /// <summary>
