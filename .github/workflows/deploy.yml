@@ -13,6 +13,9 @@ jobs:
       run: |
         $APIKEY="${{ secrets.FRENDS_NUGET_FEED_KEY }}"
         $VER=$(Get-Content -Path .\Version).Split(".")
+        if ($VER.Length -eq 2) {
+          $VER = @($VER[0], $VER[1], 0)
+        }
         $VER[2] = [int]$VER[2] + 1
         $VER = $VER -join "."
         Write-Host "Building version: $VER"
