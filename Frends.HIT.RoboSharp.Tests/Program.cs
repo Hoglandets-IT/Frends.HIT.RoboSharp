@@ -18,6 +18,6 @@ class Tests {
         var param = new SyncParameters();
 
         var exInfo = Frends.HIT.RoboSharp.Main.SyncFolders(sett, param);
-        Console.WriteLine(exInfo);
+        Console.WriteLine(exInfo.ToString());
     }
 }

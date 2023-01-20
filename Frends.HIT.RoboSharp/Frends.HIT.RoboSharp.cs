@@ -46,6 +46,8 @@ namespace Frends.HIT.RoboSharp {
                 else {
                     ShellParams = "/C ";
                 }
+                exInfo.FullLog.Add("Shell parameters set");
+
 
                 exInfo.Command = parameters.Shell.ToString() + ".exe" + ShellParams + String.Join(" ", RoboCommand);
 
@@ -59,13 +61,15 @@ namespace Frends.HIT.RoboSharp {
                         CreateNoWindow = true
                     }
                 };
-                
+                exInfo.FullLog.Add("Process created");
                 process.Start();
+                exInfo.FullLog.Add("Process started");
 
                 while (!process.StandardOutput.EndOfStream) {
                     string line = process.StandardOutput.ReadLine().TrimStart(new char[]{' ', '\t'});
-                    if (line.StartsWith("ERROR")) {
-                        exInfo.FullLog.Add(line);                    
+                    if (line.StartsWith("ERROR") || line.StartsWith("The system cannot")) {
+                        exInfo.FullLog.Add("ERROR found: ");
+                        exInfo.FullLog.Add(line);               
                     }
                     if (line != "") {
                         exInfo.FullLog.Add(line);
@@ -86,22 +90,25 @@ namespace Frends.HIT.RoboSharp {
                         }
                     }
                 }
+                exInfo.FullLog.Add("Process exited");
 
                 // Get exit code from RoboExitCode by number
                 // Get name of exit code
                 // Set other exit parameters
                 exInfo.ExitCode = (RoboExitCode)process.ExitCode;
                 exInfo.ExitMessage = Regex.Replace(exInfo.ExitCode.ToString(), "(\\B[A-Z])", " $1");
+                exInfo.FullLog.Add("Exit info and messages set");
 
                 // Close the process
                 process.Close();
+                exInfo.FullLog.Add("Process closed");
             }
             catch (Exception e) {
+                exInfo.ExitMessage = "Serious Error Occured - Check Log";
+
                 // Add caught error message to log
                 exInfo.FullLog.Add(e.Message);
-
                 exInfo.ExitCode = RoboExitCode.SeriousError;
-                // exInfo.ExitMessage = "Serious Error Occured - Check Log";
             }
 
             if (exInfo.ExitCode == RoboExitCode.SeriousError) {
