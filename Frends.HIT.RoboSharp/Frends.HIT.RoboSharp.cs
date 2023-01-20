@@ -34,7 +34,7 @@ namespace Frends.HIT.RoboSharp {
                 exInfo.FullLog.Add("Authentication commands created");
 
                 // Create the robocopy command with parameters
-                string RoboCommand = "robocopy \"" + target.Source.Path + "\" \"" + target.Destination.Path + "\" /NP" + parameters.GetAdditionalFlags();
+                string RoboCommand = "robocopy \"" + target.Source.Path + "\" \"" + target.Destination.Path + "\" /NP" + parameters.GetAdditionalFlags() + "; exit $LASTEXITCODE";
                 exInfo.FullLog.Add("Flags fetched and added to Robocopy command");
                 exInfo.FullLog.Add("Command: " + RoboCommand);
 
