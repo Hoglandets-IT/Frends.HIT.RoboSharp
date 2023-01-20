@@ -5,6 +5,7 @@ Frends task to synchronize folders between two Windows machines over SMB. Requir
 ### Changelog
 | Version | Date | Notes |
 | --- | --- | --- |
+| 0.6.6 | 2022-01-20 | Extended logging/error return for determining errors during configuration |
 | 0.6.5 | 2022-01-19 | Bugfix - trying to access process after closing <br/> Added extended error reporting/handling |
 | 0.6.4 | 2022-01-19 | Bugfix - no space between first flag and previous data <br/> Added json output for errors |
 | 0.6.3 | 2022-01-19 | Fixed substring match in case string is shorter than potential match |

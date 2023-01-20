@@ -25,17 +25,17 @@ namespace Frends.HIT.RoboSharp {
             }; 
 
             try {
-
-            
-
                 // Create the authentication commands
                 List<string> AuthCommand = new List<string>(){
                     "net use \"" + target.Source.Path + "\" \"" + target.Source.Password + "\" /user:" + target.Source.Username + ";",
                     "net use \"" + target.Destination.Path + "\" \"" + target.Destination.Password + "\" /user:" + target.Destination.Username + ";"
                 };
+                exInfo.FullLog.Add("Authentication commands created");
 
                 // Create the robocopy command with parameters
                 string RoboCommand = "robocopy \"" + target.Source.Path + "\" \"" + target.Destination.Path + "\" /NP" + parameters.GetAdditionalFlags();
+                exInfo.FullLog.Add("Flags fetched and added to Robocopy command");
+                exInfo.FullLog.Add("Command: " + RoboCommand);
 
                 // Set shell-based parameters
                 string ShellParams = "";
@@ -95,7 +95,11 @@ namespace Frends.HIT.RoboSharp {
                 // Close the process
                 process.Close();
             }
-            catch {
+            catch (Exception e) {
+                // Add caught error message to log
+                exInfo.FullLog.Add(e.Message);
+                exInfo.FullLog.Add(JsonConvert.SerializeObject(e));
+
                 exInfo.ExitCode = RoboExitCode.SeriousError;
                 exInfo.ExitMessage = "Serious Error Occured - Check Log";
             }
@@ -103,7 +107,7 @@ namespace Frends.HIT.RoboSharp {
             if (exInfo.ExitCode == RoboExitCode.SeriousError) {
                     throw new Exception(JsonConvert.SerializeObject(exInfo));
             }
-            
+
             // Return the exit code
             return exInfo;            
         }
