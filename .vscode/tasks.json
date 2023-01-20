@@ -14,6 +14,17 @@
             "problemMatcher": "$msCompile"
         },
         {
+            "label": "runtest",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "test",
+                "${workspaceFolder}/Frends.HIT.RoboSharp/Frends.HIT.RoboSharp.Tests.csproj",
+                "/property:GenerateFullPaths=true",
+                "/consoleloggerparameters:NoSummary"
+            ]
+        },
+        {
             "label": "publish",
             "command": "dotnet",
             "type": "process",

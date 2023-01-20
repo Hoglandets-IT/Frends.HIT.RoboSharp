@@ -21,7 +21,8 @@ namespace Frends.HIT.RoboSharp {
         public static SyncExitInfo SyncFolders([PropertyTab]TargetSettings target, [PropertyTab]SyncParameters parameters) {
             SyncExitInfo exInfo = new SyncExitInfo(){
                 Source = target.Source.Path,
-                Destination = target.Destination.Path
+                Destination = target.Destination.Path,
+                FullLog = new List<string>()
             }; 
 
             try {
@@ -98,10 +99,9 @@ namespace Frends.HIT.RoboSharp {
             catch (Exception e) {
                 // Add caught error message to log
                 exInfo.FullLog.Add(e.Message);
-                exInfo.FullLog.Add(JsonConvert.SerializeObject(e));
 
                 exInfo.ExitCode = RoboExitCode.SeriousError;
-                exInfo.ExitMessage = "Serious Error Occured - Check Log";
+                // exInfo.ExitMessage = "Serious Error Occured - Check Log";
             }
 
             if (exInfo.ExitCode == RoboExitCode.SeriousError) {

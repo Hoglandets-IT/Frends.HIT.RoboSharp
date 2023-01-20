@@ -9,8 +9,12 @@
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
-            "program": "${workspaceFolder}/Frends.HIT.RoboSharp.Tests/bin/Debug/netstandard2.0/Frends.HIT.RoboSharp.Tests.dll",
-            "args": [],
+            "program": "dotnet",
+            "args": [
+                "run",
+                "--project",
+                "${workspaceFolder}/Frends.HIT.RoboSharp.Tests/Frends.HIT.RoboSharp.Tests.csproj"
+            ],
             "cwd": "${workspaceFolder}",
             "console": "internalConsole",
             "stopAtEntry": false
