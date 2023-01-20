@@ -290,6 +290,39 @@ namespace Frends.HIT.RoboSharp {
         }
 
         /// <summary>
+        /// Returns an instance with default values
+        /// </summary>
+        public static SyncParameters GetDefaultInstance()
+        {
+            return new SyncParameters()
+            {
+                Shell = RunWithShell.powershell,
+                ExcludeFiles = null,
+                ExcludeFolders = null,
+                MIR = true,
+                S = false,
+                E = false,
+                SEC = false,
+                COPYALL = false,
+                A = false,
+                M = false,
+                CREATE = false,
+                MOV = false,
+                MOVE = false,
+                Z = false,
+                ZB = true,
+                B = false,
+                J = false,
+                XX = false,
+                TBD = false,
+                NFL = true,
+                NDL = true,
+                R = 10,
+                W = 30
+            };
+        }
+
+        /// <summary>
         /// Returns the additional flags as a string
         /// </summary>
         public string GetAdditionalFlags()

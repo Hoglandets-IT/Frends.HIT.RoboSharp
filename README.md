@@ -5,6 +5,7 @@ Frends task to synchronize folders between two Windows machines over SMB. Requir
 ### Changelog
 | Version | Date | Notes |
 | --- | --- | --- |
+| 0.6.10 | 2022-01-20 | Minor bugfixes |
 | 0.6.9 | 2022-01-20 | Added additional debug messages to follow process |
 | 0.6.8 | 2022-01-20 | Bump newtonsoft version to 13.x |
 | 0.6.7 | 2022-01-20 | Bugfix: Initialized full log list |

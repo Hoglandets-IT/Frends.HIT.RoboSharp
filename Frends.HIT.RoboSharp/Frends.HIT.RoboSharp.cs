@@ -41,7 +41,7 @@ namespace Frends.HIT.RoboSharp {
                 // Set shell-based parameters
                 string ShellParams = "";
                 if (parameters.Shell == RunWithShell.powershell || parameters.Shell == RunWithShell.pwsh) {
-                    ShellParams = "-NoProfile -ExecutionPolicy Bypass -Command ";
+                    ShellParams = " -NoProfile -ExecutionPolicy Bypass -Command ";
                 }
                 else {
                     ShellParams = "/C ";
@@ -104,10 +104,11 @@ namespace Frends.HIT.RoboSharp {
                 exInfo.FullLog.Add("Process closed");
             }
             catch (Exception e) {
-                exInfo.ExitMessage = "Serious Error Occured - Check Log";
+                exInfo.ExitMessage = "Serious Error Occured - Check Full Logs";
 
                 // Add caught error message to log
                 exInfo.FullLog.Add(e.Message);
+                exInfo.FullLog.Add(JsonConvert.SerializeObject(e));
                 exInfo.ExitCode = RoboExitCode.SeriousError;
             }
 
