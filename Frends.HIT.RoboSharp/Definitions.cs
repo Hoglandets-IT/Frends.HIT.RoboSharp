@@ -329,7 +329,7 @@ namespace Frends.HIT.RoboSharp {
         {
             var flags = new List<string>(){
                 ExcludeFiles.Length > 0 ? "/XF \"" + String.Join(" ", ExcludeFiles) + "\"" : null, 
-                ExcludeFolders.Length > 0 ? "/XF \"" + String.Join(" ", ExcludeFolders) + "\"" : null, 
+                ExcludeFolders.Length > 0 ? "/XD \"" + String.Join(" ", ExcludeFolders) + "\"" : null, 
                 MIR ? "/MIR" : null,
                 S ? "/S" : null,
                 E ? "/E" : null,

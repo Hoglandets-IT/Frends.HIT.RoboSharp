@@ -5,6 +5,7 @@ Frends task to synchronize folders between two Windows machines over SMB. Requir
 ### Changelog
 | Version | Date | Notes |
 | --- | --- | --- |
+| 0.9.2 | 2022-01-23 | Bugfix, XD instead of XF for folder ignores |
 | 0.9.0/0.9.1 | 2022-01-20 | Finished and verified function <br /> Bump minor version to Beta |
 | 0.6.10 | 2022-01-20 | Minor bugfixes |
 | 0.6.9 | 2022-01-20 | Added additional debug messages to follow process |
