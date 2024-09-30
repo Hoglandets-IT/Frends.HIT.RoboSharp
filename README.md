@@ -1,3 +1,7 @@
+# Deprecated
+No longer actively maintained. We recommend switching to [Frends.HIT.RCTransfer](https://github.com/hoglandets-it/frends.hit.rctransfer)
+
+
 # Frends.HIT.RoboSharp (.NET 4.7.1)
 ## Frends.HIT.RoboSharp.SyncFolders
 Frends task to synchronize folders between two Windows machines over SMB. Requires .NET 4.7.1 on a Windows machine.
